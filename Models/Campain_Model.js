@@ -30,6 +30,13 @@ const Campaign = sequelize.define("Campaign", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+
+  // ✅ EMAIL FIELD ADDED
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+
   details: {
     type: DataTypes.TEXT,
     allowNull: false,

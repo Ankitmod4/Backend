@@ -6,10 +6,9 @@ const Business = require("../Models/Business_Model");
 exports.getBusinessById = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("Fetching business with ID:", id);
 
     const business = await Business.findByPk(id, {
-      attributes: ["id", "BusinessName", "Email", "PhoneNumber"],
+      attributes: ["id", "BusinessName", "Email", "PhoneNumber", "Password"],
     });
 
     if (!business) {
@@ -24,7 +23,6 @@ exports.getBusinessById = async (req, res) => {
       data: business,
     });
   } catch (error) {
-    console.error(error);
     res.status(500).json({
       success: false,
       error: error.message,
@@ -34,13 +32,12 @@ exports.getBusinessById = async (req, res) => {
 
 /* =========================
    UPDATE BUSINESS BY ID
+   (PASSWORD INCLUDED)
    ========================= */
 exports.updateBusinessById = async (req, res) => {
   try {
     const { id } = req.params;
-    const { BusinessName, Email, PhoneNumber } = req.body;
-
-    console.log("Updating business with ID:", id);
+    const { BusinessName, Email, PhoneNumber, Password } = req.body;
 
     const business = await Business.findByPk(id);
 
@@ -50,11 +47,23 @@ exports.updateBusinessById = async (req, res) => {
         message: "Business not found",
       });
     }
+    if(Email){
+      const existingBusiness = await Business.findOne({ where: { Email } });
+      if (existingBusiness && existingBusiness.id !== business.id) {
+        return res.status(400).json({
+          success: false,
+          message: "Email already in use by another business",
+        });
+      }
+    }
 
-    // update only allowed fields
-    business.BusinessName = BusinessName ?? business.BusinessName;
-    business.Email = Email ?? business.Email;
-    business.PhoneNumber = PhoneNumber ?? business.PhoneNumber;
+    // ✅ update fields only if provided
+    if (BusinessName !== undefined) business.BusinessName = BusinessName;
+    if (Email !== undefined) business.Email = Email;
+    if (PhoneNumber !== undefined) business.PhoneNumber = PhoneNumber;
+    if (Password && Password.trim() !== "") {
+      business.Password = Password; // later bcrypt laga denge
+    }
 
     await business.save();
 
@@ -69,7 +78,6 @@ exports.updateBusinessById = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error);
     res.status(500).json({
       success: false,
       error: error.message,

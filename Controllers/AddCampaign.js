@@ -10,6 +10,7 @@ exports.addCampaign = async (req, res) => {
       endDate,
       budget,
       location,
+      email,      // ✅ EMAIL
       details,
     } = req.body;
 
@@ -21,6 +22,7 @@ exports.addCampaign = async (req, res) => {
       !endDate ||
       !budget ||
       !location ||
+      !email ||        // ✅ VALIDATION
       !details
     ) {
       return res.status(400).json({
@@ -37,6 +39,7 @@ exports.addCampaign = async (req, res) => {
       endDate,
       budget,
       location,
+      email,       // ✅ SAVE EMAIL
       details,
     });
 

@@ -23,7 +23,7 @@ exports.loginBusiness = async (req, res) => {
     if (!business) {
       return res.status(404).json({
         success: false,
-        message: "Business not found"
+        message: "Business not found with this email go to signup"
       });
     }
 

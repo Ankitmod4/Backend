@@ -35,7 +35,7 @@ exports.signupInfluencer = async (req, res) => {
     if (existing) {
       return res.status(400).json({
         success: false,
-        message: "Email already registered"
+        message: "Email already registered go to login"
       });
     }
 
