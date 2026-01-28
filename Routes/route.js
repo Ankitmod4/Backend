@@ -48,7 +48,8 @@ router.post("/addcampaign", addCampaign);
 router.get("/admin/users", getAllUsers);
 router.get("/admin/influencers", getAllInfluencersAdmin);
 router.get("/business/:id", getBusinessById);
-router.post("/blogs", addBlog);
+router.post("/blogs",  upload.single("image"),
+ addBlog);
 
 router.get("/blogs", getAllBlogs);
 

@@ -10,6 +10,14 @@ const Blog = sequelize.define("Blog", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  image: {
+    type: DataTypes.STRING, // cloudinary URL
+    allowNull: true,
+  },
 });
 
 module.exports = Blog;
+
+
+
+

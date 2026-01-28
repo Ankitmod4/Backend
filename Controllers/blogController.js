@@ -1,4 +1,5 @@
 const Blog = require("../Models/Blogs_Model");
+const cloudinary = require("../config/cloudinary");
 
 /* ================= ADD BLOG ================= */
 exports.addBlog = async (req, res) => {
@@ -12,7 +13,26 @@ exports.addBlog = async (req, res) => {
       });
     }
 
-    const blog = await Blog.create({ title, content });
+    let imageUrl = null;
+
+    if (req.file) {
+      const uploadResult = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "blogs" },
+          (err, result) => (err ? reject(err) : resolve(result))
+        );
+        stream.end(req.file.buffer);
+      });
+      // console.log("Cloudinary Upload Result:", uploadResult.url);
+
+      imageUrl = uploadResult.url;
+    }
+
+    const blog = await Blog.create({
+      title,
+      content,
+      image: imageUrl,
+    });
 
     res.status(201).json({
       success: true,
@@ -73,3 +93,7 @@ exports.deleteBlog = async (req, res) => {
     });
   }
 };
+
+
+
+
