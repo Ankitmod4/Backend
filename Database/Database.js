@@ -40,5 +40,13 @@ const sequelize = new Sequelize(
     },
   }
 );
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("🔥 DB CONNECTED SUCCESSFULLY");
+  } catch (err) {
+    console.error("💀 DB CONNECTION FAILED:", err);
+  }
+})();
 
 module.exports = sequelize;
