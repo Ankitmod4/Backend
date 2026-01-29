@@ -16,13 +16,13 @@ app.use('/api', router);
 
 
 
-// sequelize.sync({alter: true})
-//   .then(() => {
-//     console.log('✅ All tables created / updated successfully');
-//   })
-//   .catch((err) => {
-//     console.log('❌ Error creating tables:', err);
-//   });
+sequelize.sync({alter: true})
+  .then(() => {
+    console.log('✅ All tables created / updated successfully');
+  })
+  .catch((err) => {
+    console.log('❌ Error creating tables:', err);
+  });
   
 
 // Test route
