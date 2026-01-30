@@ -3,11 +3,16 @@ const express = require('express');
 const cors = require('cors');
 const sequelize = require('./Database/Database');
 const router = require('./Routes/route');
+const corsOptions = {
+  origin: 'https://influencialhub.com/', // Yahan apni frontend ka asli URL dalo
+  optionsSuccessStatus: 200
+};
 
+app.use(cors(corsOptions));
 
 
 const app = express();
-app.use(cors()); 
+
 
 app.use(express.json());
 const PORT = 8080;
