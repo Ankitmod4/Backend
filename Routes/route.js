@@ -25,13 +25,14 @@ const { addCampaign } = require("../Controllers/AddCampaign");
 const {
   getInfluencerById,
 } = require("../Controllers/Influencer_by_IdController");
-const { getAllCampaigns } = require("../Controllers/GetAllCampaign");
+const { getAllCampaigns,getCampaignsByEmail,DeleteACampaign } = require("../Controllers/GetAllCampaign");
 const { updateBusinessById,getBusinessById } = require("../Controllers/UserEdit");
 const {
   addBlog,
   getAllBlogs,
   deleteBlog,
 } = require("../Controllers/blogController");
+
 
 router.get("/influencers", getAllInfluencers);
 router.get("/influencers/:id", getInfluencerById);
@@ -41,7 +42,9 @@ router.post("/influencer/login", loginInfluencer);
 router.post("/business/register", createBusiness);
 router.post("/business/login", loginBusiness);
 router.get("/influencer/:id", getInfluencerId);
-router.get("/campaigns", getAllCampaigns);
+router.get("/campaigns", getAllCampaigns); 
+router.post("/campaigns/email", getCampaignsByEmail);
+router.delete("/campaigns/:id", DeleteACampaign);
 router.put("/business/:id", updateBusinessById);
 router.post("/addcampaign", addCampaign);
 // LIST

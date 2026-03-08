@@ -19,7 +19,7 @@ app.use('/api', router);
 
 
 
-sequelize.sync({alter: true})
+sequelize.sync()
   .then(() => {
     console.log('✅ All tables created / updated successfully');
   })
