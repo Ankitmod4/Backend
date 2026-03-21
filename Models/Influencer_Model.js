@@ -45,7 +45,11 @@ const Influencer = sequelize.define('Influencer', {
   AccountLinks: {
     type: DataTypes.JSON,
     allowNull: false,
-  }
+  },
+  PhoneNo: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });
 
 module.exports = Influencer;

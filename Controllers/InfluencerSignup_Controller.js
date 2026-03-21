@@ -10,7 +10,8 @@ exports.signupInfluencer = async (req, res) => {
       Location,
       Followers,
       Price,
-      AccountLinks
+      AccountLinks,
+      PhoneNo
     } = req.body;
 
     // Validation
@@ -22,7 +23,9 @@ exports.signupInfluencer = async (req, res) => {
       !Location ||
       !Followers ||
       !Price ||
-      !AccountLinks
+      !AccountLinks ||
+      !PhoneNo
+
     ) {
       return res.status(400).json({
         success: false,
@@ -47,7 +50,8 @@ exports.signupInfluencer = async (req, res) => {
       Location,
       Followers,
       Price,
-      AccountLinks
+      AccountLinks,
+      PhoneNo
     });
 
     return res.status(201).json({
