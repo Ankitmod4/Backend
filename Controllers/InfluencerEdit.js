@@ -39,7 +39,7 @@ exports.updateInfluencer = async (req, res) => {
     if (req.file) {
       // Hum sirf Relative Path store karenge DB mein
       // Example: /uploads/influencers/123456.jpg
-      imageUrl = `/uploads/influencers/${req.file.filename}`;
+      imageUrl = `https://influencal.influencialhub.com/uploads/influencers/${req.file.filename}`;
     }
    console.log("Received update request for Influencer ID:", req.file);
     /* -------- PARSE ACCOUNT LINKS -------- */
