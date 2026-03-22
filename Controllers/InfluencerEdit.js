@@ -24,88 +24,57 @@ exports.getInfluencerId = async (req, res) => {
   }
 };
 
+
 exports.updateInfluencer = async (req, res) => {
   try {
-    const {
-      Name,
-      Email,
-      Password,
-      Category,
-      Location,
-      Followers,
-      Price,
-      AccountLinks,
-    } = req.body;
+    const { Name, Email, Password, Category, Location, Followers, Price, AccountLinks, PhoneNo } = req.body;
 
     const influencer = await Influencer.findByPk(req.params.id);
     if (!influencer) {
-      return res.status(404).json({
-        success: false,
-        message: "Influencer not found",
-      });
-    }
-    if(Email){
-      const existingInfluencer = await Influencer.findOne({ where: { Email } });
-      if (existingInfluencer && existingInfluencer.id !== influencer.id) {
-        return res.status(400).json({
-          success: false,
-          message: "Email already in use by another influencer",
-        });
-      }
+      return res.status(404).json({ success: false, message: "Influencer not found" });
     }
 
-    /* -------- ACCOUNT LINKS -------- */
-    let parsedLinks;
-    if (AccountLinks) {
-      try {
-        parsedLinks = JSON.parse(AccountLinks);
-      } catch {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid AccountLinks JSON",
-        });
-      }
-    }
-
-    /* -------- IMAGE UPLOAD -------- */
+    /* -------- LOCAL IMAGE HANDLING -------- */
     let imageUrl;
     if (req.file) {
-      const uploadResult = await new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: "influencers" },
-          (err, result) => (err ? reject(err) : resolve(result))
-        );
-        stream.end(req.file.buffer);
-      });
-
-      imageUrl = uploadResult.secure_url;
+      // Hum sirf Relative Path store karenge DB mein
+      // Example: /uploads/influencers/123456.jpg
+      imageUrl = `/uploads/influencers/${req.file.filename}`;
+    }
+   console.log("Received update request for Influencer ID:", req.file);
+    /* -------- PARSE ACCOUNT LINKS -------- */
+    let parsedLinks = AccountLinks;
+    if (typeof AccountLinks === "string") {
+      try {
+        parsedLinks = JSON.parse(AccountLinks);
+      } catch (e) {
+        return res.status(400).json({ success: false, message: "Invalid AccountLinks JSON" });
+      }
     }
 
     /* -------- UPDATE DATA -------- */
     const updateData = {
       ...(Name && { Name }),
       ...(Email && { Email }),
-      ...(Password && { Password }), // ✅ SIMPLE PASSWORD UPDATE
+      ...(Password && { Password }),
       ...(Category && { Category }),
       ...(Location && { Location }),
       ...(Followers && { Followers }),
       ...(Price && { Price }),
+      ...(PhoneNo && { PhoneNo }), // PhoneNo fix
       ...(parsedLinks && { AccountLinks: parsedLinks }),
-      ...(imageUrl && { ProfilePicture: imageUrl }),
+      ...(imageUrl && { ProfilePicture: imageUrl }), // DB mein local path jayega
     };
 
     await influencer.update(updateData);
 
     res.status(200).json({
       success: true,
-      message: "Influencer updated successfully",
+      message: "Influencer updated on Hostinger server!",
       data: influencer,
     });
   } catch (error) {
-    console.error("Influencer Update Error:", error);
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
+    console.error("Update Error:", error);
+    res.status(500).json({ success: false, error: error.message });
   }
 };

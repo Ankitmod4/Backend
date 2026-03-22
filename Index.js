@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require('express');
+const path = require('path');
 const app = express();
 const cors = require('cors');
 const sequelize = require('./Database/Database');
@@ -7,8 +8,7 @@ const router = require('./Routes/route');
 
 
 app.use(cors());
-
-
+app.use('/uploads', express.static('/home/u118145129/public_html/uploads'));
 
 
 
