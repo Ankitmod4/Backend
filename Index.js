@@ -6,7 +6,7 @@ const sequelize = require('./Database/Database');
 const router = require('./Routes/route');
 
 
-app.use(cors());
+// app.use(cors());
 
 
 
